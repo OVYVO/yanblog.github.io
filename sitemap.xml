@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ovyvo.github.io/yanblog.github.io/2022/10/13/blog8/</loc>
+    
+    <lastmod>2022-10-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/2021/10/19/blog4/</loc>
     
     <lastmod>2022-10-10</lastmod>
@@ -74,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/books/index.html</loc>
+    <loc>https://ovyvo.github.io/yanblog.github.io/categories/index.html</loc>
     
     <lastmod>2022-07-31</lastmod>
     
@@ -92,16 +101,7 @@
   </url>
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/categories/index.html</loc>
-    
-    <lastmod>2022-07-31</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/2020/04/03/blog2/</loc>
+    <loc>https://ovyvo.github.io/yanblog.github.io/books/index.html</loc>
     
     <lastmod>2022-07-31</lastmod>
     
@@ -118,46 +118,62 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://ovyvo.github.io/yanblog.github.io/2020/04/03/blog2/</loc>
+    
+    <lastmod>2022-07-31</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   <url>
     <loc>https://ovyvo.github.io/yanblog.github.io</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/</loc>
-    <lastmod>2022-10-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/tags/Linux/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <loc>https://ovyvo.github.io/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/</loc>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/tags/vue-3/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ovyvo.github.io/yanblog.github.io/tags/Linux/</loc>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/tags/Element/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://ovyvo.github.io/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -165,29 +181,29 @@
 
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/categories/taro/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <loc>https://ovyvo.github.io/yanblog.github.io/categories/vue/</loc>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://ovyvo.github.io/yanblog.github.io/categories/vue/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <loc>https://ovyvo.github.io/yanblog.github.io/categories/taro/</loc>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://ovyvo.github.io/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/</loc>
-    <lastmod>2022-10-10</lastmod>
+    <lastmod>2022-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
