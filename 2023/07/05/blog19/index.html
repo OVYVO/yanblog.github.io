@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>node版本管理工具nvm | Yan&#39;s Blog</title>
+  <meta name="description" content="nvm安装MacOS详见Windows详见   nvm常见命令  12345678910111213141516171819nvm list 查看已经安装的版本nvm list installed 查看已经安装的版本nvm list available 查看网络可以安装的版本nvm install 安装最新版本nvmnvm use &lt;version&gt; ## 切换使用指定的版本node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="node版本管理工具nvm">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2023/07/05/blog19/index.html">
+<meta property="og:site_name" content="Yan&#39;s Blog">
+<meta property="og:description" content="nvm安装MacOS详见Windows详见   nvm常见命令  12345678910111213141516171819nvm list 查看已经安装的版本nvm list installed 查看已经安装的版本nvm list available 查看网络可以安装的版本nvm install 安装最新版本nvmnvm use &lt;version&gt; ## 切换使用指定的版本node">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-08T07:32:07.355Z">
+<meta property="article:author" content="OVYVO">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2023/07/05/blog19/index.html">
+  
+  <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
+  
+  
+  <link rel="icon" href="/yanblog.github.io/images/favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/yanblog.github.io/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/OVYVO" target="_blank">
+          <img class="img-circle img-rotate" src="/yanblog.github.io/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">若拙</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">沪漂前端攻城狮</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 上海 · 中国</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/yanblog.github.io/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/yanblog.github.io/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/yanblog.github.io/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/yanblog.github.io/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/yanblog.github.io/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/yanblog.github.io/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/yanblog.github.io/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/CSS/">CSS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/ES6/">ES6</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/taro/">taro</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/vue/">vue</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Element/" rel="tag">Element</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-2/" rel="tag">vue-2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" rel="tag">代码规范</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/yanblog.github.io/tags/Element/" style="font-size: 13.33px;">Element</a> <a href="/yanblog.github.io/tags/JS/" style="font-size: 14px;">JS</a> <a href="/yanblog.github.io/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/yanblog.github.io/tags/vue-2/" style="font-size: 13px;">vue-2</a> <a href="/yanblog.github.io/tags/vue-3/" style="font-size: 13.67px;">vue-3</a> <a href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 13.33px;">代码规范</a> <a href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 13.67px;">小程序</a> <a href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">工具</a> <a href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">样式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/07/">七月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/08/blog21/" class="title">Mac HomeBrew安装及镜像配置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-07T16:00:00.000Z" itemprop="datePublished">2023-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog19/" class="title">node版本管理工具nvm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog20/" class="title">element-plus图标封装</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/06/06/blog18/" class="title">rsa加解签及加解密常用工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-05T16:00:00.000Z" itemprop="datePublished">2023-06-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/vue/">vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/05/26/blog17/" class="title">Vue电池小图标</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-05-25T16:00:00.000Z" itemprop="datePublished">2023-05-26</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog19" class="article article-type-post" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      
+  
+    <h1 class="article-title" itemprop="name">
+      node版本管理工具nvm
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/yanblog.github.io/2023/07/05/blog19/" class="article-date">
+	  <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 436(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+      <blockquote>
+<p>nvm安装<br><a target="_blank" rel="noopener" href="https://github.com/nvm-sh/nvm">MacOS详见</a><br><a target="_blank" rel="noopener" href="https://github.com/coreybutler/nvm-windows/releases">Windows详见</a></p>
+</blockquote>
+<blockquote>
+<p>nvm常见命令</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">nvm list 查看已经安装的版本</span><br><span class="line">nvm list installed 查看已经安装的版本</span><br><span class="line">nvm list available 查看网络可以安装的版本</span><br><span class="line">nvm install 安装最新版本nvm</span><br><span class="line">nvm use &lt;version&gt; ## 切换使用指定的版本node</span><br><span class="line">nvm ls 列出所有版本</span><br><span class="line">nvm current显示当前版本</span><br><span class="line">nvm alias &lt;name&gt; &lt;version&gt; ## 给不同的版本号添加别名</span><br><span class="line">nvm unalias &lt;name&gt; ## 删除已定义的别名</span><br><span class="line">nvm reinstall-packages &lt;version&gt; ## 在当前版本node环境下，重新全局安装指定版本号的npm包</span><br><span class="line">nvm on 打开nodejs控制</span><br><span class="line">nvm off 关闭nodejs控制</span><br><span class="line">nvm proxy 查看设置与代理</span><br><span class="line">nvm node_mirror [url] 设置或者查看setting.txt中的node_mirror，如果不设置的默认是 https://nodejs.org/dist/</span><br><span class="line">nvm npm_mirror [url] 设置或者查看setting.txt中的npm_mirror,如果不设置的话默认的是 https://github.com/npm/npm/archive/.</span><br><span class="line">nvm uninstall &lt;version&gt; 卸载制定的版本</span><br><span class="line">nvm use [version] [arch] 切换制定的node版本和位数</span><br><span class="line">nvm root [path] 设置和查看root路径</span><br><span class="line">nvm version 查看当前的版本</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意事项</p>
+</blockquote>
+<ul>
+<li>非首次安装需要将本地环境的nodejs删除干净，首次安装后需要升级nvm也需要将本地所有安装的nodejs分别uninstall</li>
+<li>windows卸载nvm:<ol>
+<li>找到nvm安装目录，如果目录中有unins000.exe文件直接执行即可</li>
+<li>如若没有unins000.exe，按照如下步骤执行</li>
+<li>删除nvm文件夹</li>
+<li>文件夹内右键 此电脑–点击属性–找到高级系统设置–环境变量。</li>
+<li>删除用户变量和系统变量中名为 NVM_HOME 和 NVM_SYMLINK 两个变量。其他的不要改。</li>
+<li>用户变量和系统变量中path中的 %NVM_HOME%;%NVM_SYMLINK% 两个属性，其他的不要改。</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2023/07/05/blog19/" title="node版本管理工具nvm" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2023/07/05/blog19/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/OVYVO" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/yanblog.github.io/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/OVYVO" target="_blank"><span class="text-dark">若拙</span><small class="ml-1x">沪漂前端攻城狮</small></a></h3>
+        <div>醉后不知天在水，满船清梦压星河。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+  
+
+  
+</div>
+
+<nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+    
+    <ul class="pager pull-left">
+      
+      <li class="prev">
+        <a href="/yanblog.github.io/2023/07/08/blog21/" title="Mac HomeBrew安装及镜像配置"><i
+            class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      </li>
+      
+      
+      <li class="next">
+        <a href="/yanblog.github.io/2023/07/05/blog20/"
+          title="element-plus图标封装"><span>下一篇&nbsp;&nbsp;</span><i
+            class="icon icon-angle-right" aria-hidden="true"></i></a>
+      </li>
+      
+      
+      <li class="toggle-toc">
+        <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+          title="文章目录" role="button">
+          <span>[&nbsp;</span><span>文章目录</span>
+          <i class="text-collapsed icon icon-anchor"></i>
+          <i class="text-in icon icon-close"></i>
+          <span>]</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal"
+      data-target="#donateModal"><span>赏</span></button>
+    <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+    
+
+    <div class="bar-right">
+      
+      <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+        data-mobile-sites="weibo,qq,qzone"></div>
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="publishby">
+            Theme base on pure
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/yanblog.github.io/js/plugin.min.js"></script>
+
+
+<script src="/yanblog.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/yanblog.github.io/',
+        CONTENT_URL: '/yanblog.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/yanblog.github.io/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

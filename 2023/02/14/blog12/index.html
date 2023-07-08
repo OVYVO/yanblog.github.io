@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Reflect概述及应用 | Yan&#39;s Blog</title>
+  <meta name="description" content="Reflect概述Reflect是ES6提供的操作对象的Api,其主要目的有   将Object对象的一些明显属于语言内部的方法（比如Object.defineProperty），放到Reflect对象上。现阶段，某些方法同时在Object和Reflect对象上部署，未来的新方法将只部署在Reflect对象上。也就是说，从Reflect对象上可以拿到语言内部的方法。 修改某些Object方法的返回">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reflect概述及应用">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog12/index.html">
+<meta property="og:site_name" content="Yan&#39;s Blog">
+<meta property="og:description" content="Reflect概述Reflect是ES6提供的操作对象的Api,其主要目的有   将Object对象的一些明显属于语言内部的方法（比如Object.defineProperty），放到Reflect对象上。现阶段，某些方法同时在Object和Reflect对象上部署，未来的新方法将只部署在Reflect对象上。也就是说，从Reflect对象上可以拿到语言内部的方法。 修改某些Object方法的返回">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-08T07:32:07.354Z">
+<meta property="article:author" content="OVYVO">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog12/index.html">
+  
+  <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
+  
+  
+  <link rel="icon" href="/yanblog.github.io/images/favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/yanblog.github.io/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/OVYVO" target="_blank">
+          <img class="img-circle img-rotate" src="/yanblog.github.io/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">若拙</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">沪漂前端攻城狮</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 上海 · 中国</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/yanblog.github.io/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/yanblog.github.io/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/yanblog.github.io/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/yanblog.github.io/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/yanblog.github.io/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/yanblog.github.io/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/yanblog.github.io/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/CSS/">CSS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/ES6/">ES6</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/taro/">taro</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/vue/">vue</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Element/" rel="tag">Element</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-2/" rel="tag">vue-2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" rel="tag">代码规范</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/yanblog.github.io/tags/Element/" style="font-size: 13.33px;">Element</a> <a href="/yanblog.github.io/tags/JS/" style="font-size: 14px;">JS</a> <a href="/yanblog.github.io/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/yanblog.github.io/tags/vue-2/" style="font-size: 13px;">vue-2</a> <a href="/yanblog.github.io/tags/vue-3/" style="font-size: 13.67px;">vue-3</a> <a href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 13.33px;">代码规范</a> <a href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 13.67px;">小程序</a> <a href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">工具</a> <a href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">样式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/07/">七月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/08/blog21/" class="title">Mac HomeBrew安装及镜像配置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-07T16:00:00.000Z" itemprop="datePublished">2023-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog19/" class="title">node版本管理工具nvm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog20/" class="title">element-plus图标封装</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/06/06/blog18/" class="title">rsa加解签及加解密常用工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-05T16:00:00.000Z" itemprop="datePublished">2023-06-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/vue/">vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/05/26/blog17/" class="title">Vue电池小图标</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-05-25T16:00:00.000Z" itemprop="datePublished">2023-05-26</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reflect%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">Reflect概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reflect%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">Reflect静态方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8Proxy%E5%92%8CReflect%E5%AE%9E%E7%8E%B0%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">实例：使用Proxy和Reflect实现观察者模式</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog12" class="article article-type-post" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Reflect概述及应用
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/yanblog.github.io/2023/02/14/blog12/" class="article-date">
+	  <time datetime="2023-02-13T16:00:00.000Z" itemprop="datePublished">2023-02-14</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/yanblog.github.io/categories/ES6/">ES6</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 848(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+      <h3 id="Reflect概述"><a href="#Reflect概述" class="headerlink" title="Reflect概述"></a>Reflect概述</h3><p>Reflect是ES6提供的操作对象的Api,其主要目的有</p>
+<ul>
+<li> 将Object对象的一些明显属于语言内部的方法（比如Object.defineProperty），放到Reflect对象上。现阶段，某些方法同时在Object和Reflect对象上部署，未来的新方法将只部署在Reflect对象上。也就是说，从Reflect对象上可以拿到语言内部的方法。</li>
+<li>修改某些Object方法的返回结果，让其变得更合理。比如，Object.defineProperty(obj, name, desc)在无法定义属性时，会抛出一个错误，而Reflect.defineProperty(obj, name, desc)则会返回false。</li>
+<li>让Object操作都变成函数行为。某些Object操作是命令式，比如name in obj和delete obj[name]，而Reflect.has(obj, name)和Reflect.deleteProperty(obj, name)让它们变成了函数行为。</li>
+<li>Reflect对象的方法与Proxy对象的方法一一对应，只要是Proxy对象的方法，就能在Reflect对象上找到对应的方法。这就让Proxy对象可以方便地调用对应的Reflect方法，完成默认行为，作为修改行为的基础。</li>
+</ul>
+<h3 id="Reflect静态方法"><a href="#Reflect静态方法" class="headerlink" title="Reflect静态方法"></a>Reflect静态方法</h3><ul>
+<li>Reflect.get(target,name,receiver):查找并返回target对象的name属性，如果没有该属性返回undefined</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">bar</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">baz</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">foo</span> + <span class="variable language_">this</span>.<span class="property">bar</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myReceiverObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">4</span>,</span><br><span class="line">  <span class="attr">bar</span>: <span class="number">4</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// Reflect.get的第一个参数不是对象会报错</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">get</span>(myObject, <span class="string">&#x27;foo&#x27;</span>) <span class="comment">// 1</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">get</span>(myObject, <span class="string">&#x27;bar&#x27;</span>) <span class="comment">// 2</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">get</span>(myObject, <span class="string">&#x27;baz&#x27;</span>) <span class="comment">// 3</span></span><br><span class="line"><span class="comment">// 如果有reciver参数则getter的this绑定receiver</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">get</span>(myObject, <span class="string">&#x27;baz&#x27;</span>, myReceiverObject) <span class="comment">// 8</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>Reflect.set(target,name,value,receiver):设置对象的name属性值为value</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">4</span>,</span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">bar</span>(<span class="params">value</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">foo</span> = value;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myReceiverObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">0</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">set</span>(myObject, <span class="string">&#x27;bar&#x27;</span>, <span class="number">1</span>, myReceiverObject);</span><br><span class="line">myObject.<span class="property">foo</span> <span class="comment">// 4</span></span><br><span class="line">myReceiverObject.<span class="property">foo</span> <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Reflect.has(obj,name):判断obj对象是否包含name属性</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 旧写法</span></span><br><span class="line"><span class="string">&#x27;foo&#x27;</span> <span class="keyword">in</span> myObject <span class="comment">// true</span></span><br><span class="line"><span class="comment">// 新写法</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">has</span>(myObject, <span class="string">&#x27;foo&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Reflect.deleteProperty(obj, name):等同于delete obj[name]方法，删除对象的name属性值</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myObj = &#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 旧写法</span></span><br><span class="line"><span class="keyword">delete</span> myObj.<span class="property">foo</span>;</span><br><span class="line"><span class="comment">// 新写法</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">deleteProperty</span>(myObj, <span class="string">&#x27;foo&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Reflect.construct(target,args):等同于new target(…args)提供了一种不使用new调用构造函数的方法。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Greeting</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// new 的写法</span></span><br><span class="line"><span class="keyword">const</span> instance = <span class="keyword">new</span> <span class="title class_">Greeting</span>(<span class="string">&#x27;张三&#x27;</span>);</span><br><span class="line"><span class="comment">// Reflect.construct 的写法</span></span><br><span class="line"><span class="keyword">const</span> instance = <span class="title class_">Reflect</span>.<span class="title function_">construct</span>(<span class="title class_">Greeting</span>, [<span class="string">&#x27;张三&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Reflect.apply(func,thisArg,args):等同于Function.prototype.apply.call(func,thisArg,args)用于绑定this对象后执行给定函数。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ages = [<span class="number">11</span>, <span class="number">33</span>, <span class="number">12</span>, <span class="number">54</span>, <span class="number">18</span>, <span class="number">96</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 旧写法</span></span><br><span class="line"><span class="keyword">const</span> youngest = <span class="title class_">Math</span>.<span class="property">min</span>.<span class="title function_">apply</span>(<span class="title class_">Math</span>, ages);</span><br><span class="line"><span class="keyword">const</span> oldest = <span class="title class_">Math</span>.<span class="property">max</span>.<span class="title function_">apply</span>(<span class="title class_">Math</span>, ages);</span><br><span class="line"><span class="keyword">const</span> type = <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(youngest);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新写法</span></span><br><span class="line"><span class="keyword">const</span> youngest = <span class="title class_">Reflect</span>.<span class="title function_">apply</span>(<span class="title class_">Math</span>.<span class="property">min</span>, <span class="title class_">Math</span>, ages);</span><br><span class="line"><span class="keyword">const</span> oldest = <span class="title class_">Reflect</span>.<span class="title function_">apply</span>(<span class="title class_">Math</span>.<span class="property">max</span>, <span class="title class_">Math</span>, ages);</span><br><span class="line"><span class="keyword">const</span> type = <span class="title class_">Reflect</span>.<span class="title function_">apply</span>(<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>, youngest, []);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Reflect.ownKeys(target):返回对象的所有属性，等同于Object.getOwnPropertyNames与Object.getOwnPropertySymbols之和</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObject = &#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">bar</span>: <span class="number">2</span>,</span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&#x27;baz&#x27;</span>)]: <span class="number">3</span>,</span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="title function_">for</span>(<span class="string">&#x27;bing&#x27;</span>)]: <span class="number">4</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 旧写法</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">getOwnPropertyNames</span>(myObject)</span><br><span class="line"><span class="comment">// [&#x27;foo&#x27;, &#x27;bar&#x27;]</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">getOwnPropertySymbols</span>(myObject)</span><br><span class="line"><span class="comment">//[Symbol(baz), Symbol(bing)]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 新写法</span></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">ownKeys</span>(myObject)</span><br><span class="line"><span class="comment">// [&#x27;foo&#x27;, &#x27;bar&#x27;, Symbol(baz), Symbol(bing)]</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>其他Api参见 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect">CDN-Reflect</a></li>
+</ul>
+<h3 id="实例：使用Proxy和Reflect实现观察者模式"><a href="#实例：使用Proxy和Reflect实现观察者模式" class="headerlink" title="实例：使用Proxy和Reflect实现观察者模式"></a>实例：使用Proxy和Reflect实现观察者模式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 观察目标</span></span><br><span class="line"><span class="keyword">const</span> person = <span class="title function_">observable</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">  <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 观察者</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">print</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`<span class="subst">$&#123;person.name&#125;</span>, <span class="subst">$&#123;person.age&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">observe</span>(print);</span><br><span class="line">person.<span class="property">name</span> = <span class="string">&#x27;李四&#x27;</span>;</span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// 李四, 20</span></span><br></pre></td></tr></table></figure>
+<p>实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> queuedObservers = <span class="keyword">new</span> <span class="title class_">Set</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">observe</span> = fn =&gt; queuedObservers.<span class="title function_">add</span>(fn);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">observable</span> = obj =&gt; <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj, &#123;set&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver);</span><br><span class="line">  queuedObservers.<span class="title function_">forEach</span>(<span class="function"><span class="params">observer</span> =&gt;</span> <span class="title function_">observer</span>());</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog12/" title="Reflect概述及应用" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog12/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/OVYVO" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/yanblog.github.io/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/OVYVO" target="_blank"><span class="text-dark">若拙</span><small class="ml-1x">沪漂前端攻城狮</small></a></h3>
+        <div>醉后不知天在水，满船清梦压星河。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+  
+
+  
+</div>
+
+<nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+    
+    <ul class="pager pull-left">
+      
+      <li class="prev">
+        <a href="/yanblog.github.io/2023/02/20/blog14/" title="Promise概述及应用"><i
+            class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      </li>
+      
+      
+      <li class="next">
+        <a href="/yanblog.github.io/2023/02/14/blog13/"
+          title="Proxy概述及应用"><span>下一篇&nbsp;&nbsp;</span><i
+            class="icon icon-angle-right" aria-hidden="true"></i></a>
+      </li>
+      
+      
+      <li class="toggle-toc">
+        <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+          title="文章目录" role="button">
+          <span>[&nbsp;</span><span>文章目录</span>
+          <i class="text-collapsed icon icon-anchor"></i>
+          <i class="text-in icon icon-close"></i>
+          <span>]</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal"
+      data-target="#donateModal"><span>赏</span></button>
+    <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+    
+
+    <div class="bar-right">
+      
+      <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+        data-mobile-sites="weibo,qq,qzone"></div>
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="publishby">
+            Theme base on pure
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/yanblog.github.io/js/plugin.min.js"></script>
+
+
+<script src="/yanblog.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/yanblog.github.io/',
+        CONTENT_URL: '/yanblog.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/yanblog.github.io/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

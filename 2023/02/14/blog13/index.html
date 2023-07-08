@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Proxy概述及应用 | Yan&#39;s Blog</title>
+  <meta name="description" content="1.proxy概述用于在修改某些操作的默认行为，可理解为在目标之前架设一层拦截器，外界所有的访问都要通过该拦截器，可以对访问做出过滤和改写。 1234567891011121314151617181920var proxy &#x3D; new Proxy(target, handler);&#x2F;&#x2F; target:拦截对象 handler:对象，定义拦截行为var obj &#x3D; new Proxy(&amp;#123;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proxy概述及应用">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog13/index.html">
+<meta property="og:site_name" content="Yan&#39;s Blog">
+<meta property="og:description" content="1.proxy概述用于在修改某些操作的默认行为，可理解为在目标之前架设一层拦截器，外界所有的访问都要通过该拦截器，可以对访问做出过滤和改写。 1234567891011121314151617181920var proxy &#x3D; new Proxy(target, handler);&#x2F;&#x2F; target:拦截对象 handler:对象，定义拦截行为var obj &#x3D; new Proxy(&amp;#123;&amp;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-07-08T07:32:07.354Z">
+<meta property="article:author" content="OVYVO">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog13/index.html">
+  
+  <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
+  
+  
+  <link rel="icon" href="/yanblog.github.io/images/favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/yanblog.github.io/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/OVYVO" target="_blank">
+          <img class="img-circle img-rotate" src="/yanblog.github.io/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">若拙</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">沪漂前端攻城狮</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 上海 · 中国</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/yanblog.github.io/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/yanblog.github.io/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/yanblog.github.io/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/yanblog.github.io/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/yanblog.github.io/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/yanblog.github.io/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/yanblog.github.io/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/CSS/">CSS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/ES6/">ES6</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/taro/">taro</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/vue/">vue</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Element/" rel="tag">Element</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-2/" rel="tag">vue-2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" rel="tag">代码规范</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/yanblog.github.io/tags/Element/" style="font-size: 13.33px;">Element</a> <a href="/yanblog.github.io/tags/JS/" style="font-size: 14px;">JS</a> <a href="/yanblog.github.io/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/yanblog.github.io/tags/vue-2/" style="font-size: 13px;">vue-2</a> <a href="/yanblog.github.io/tags/vue-3/" style="font-size: 13.67px;">vue-3</a> <a href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 13.33px;">代码规范</a> <a href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 13.67px;">小程序</a> <a href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 13.33px;">工具</a> <a href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">样式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/07/">七月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/08/blog21/" class="title">Mac HomeBrew安装及镜像配置</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-07T16:00:00.000Z" itemprop="datePublished">2023-07-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog19/" class="title">node版本管理工具nvm</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/07/05/blog20/" class="title">element-plus图标封装</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-07-04T16:00:00.000Z" itemprop="datePublished">2023-07-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/06/06/blog18/" class="title">rsa加解签及加解密常用工具</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-06-05T16:00:00.000Z" itemprop="datePublished">2023-06-06</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/vue/">vue</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/05/26/blog17/" class="title">Vue电池小图标</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-05-25T16:00:00.000Z" itemprop="datePublished">2023-05-26</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-proxy%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1.proxy概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-proxy%E6%8B%A6%E6%88%AA%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">2.proxy拦截操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-proxy%E5%B8%B8%E7%94%A8%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">3.proxy常用实例方法</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog13" class="article article-type-post" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Proxy概述及应用
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/yanblog.github.io/2023/02/14/blog13/" class="article-date">
+	  <time datetime="2023-02-13T16:00:00.000Z" itemprop="datePublished">2023-02-14</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/yanblog.github.io/categories/ES6/">ES6</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+      <h3 id="1-proxy概述"><a href="#1-proxy概述" class="headerlink" title="1.proxy概述"></a>1.proxy概述</h3><p>用于在修改某些操作的默认行为，可理解为在目标之前架设一层拦截器，外界所有的访问都要通过该拦截器，可以对访问做出过滤和改写。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);<span class="comment">// target:拦截对象 handler:对象，定义拦截行为</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;, &#123;</span><br><span class="line">  <span class="attr">get</span>: <span class="keyword">function</span> (<span class="params">target, propKey, receiver</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`getting <span class="subst">$&#123;propKey&#125;</span>!`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, propKey, receiver);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">set</span>: <span class="keyword">function</span> (<span class="params">target, propKey, value, receiver</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`setting <span class="subst">$&#123;propKey&#125;</span>!`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, propKey, value, receiver);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.<span class="property">count</span> = <span class="number">1</span></span><br><span class="line"><span class="comment">//  setting count!</span></span><br><span class="line">++obj.<span class="property">count</span></span><br><span class="line"><span class="comment">//  getting count!</span></span><br><span class="line"><span class="comment">//  setting count!</span></span><br><span class="line"><span class="comment">//  2</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-proxy拦截操作"><a href="#2-proxy拦截操作" class="headerlink" title="2.proxy拦截操作"></a>2.proxy拦截操作</h3><ol>
+<li>get(target, propKey, receiver)：拦截对象属性的读取，比如proxy.foo和proxy[‘foo’]。</li>
+<li>set(target, propKey, value, receiver)：拦截对象属性的设置，比如proxy.foo = v或proxy[‘foo’] = v，返回一个布尔值。</li>
+<li>has(target, propKey)：拦截propKey in proxy的操作，返回一个布尔值。</li>
+<li>deleteProperty(target, propKey)：拦截delete proxy[propKey]的操作，返回一个布尔值。</li>
+<li>ownKeys(target)：拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for…in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。</li>
+<li>getOwnPropertyDescriptor(target, propKey)：拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。</li>
+<li>defineProperty(target, propKey, propDesc)：拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。</li>
+<li>preventExtensions(target)：拦截Object.preventExtensions(proxy)，返回一个布尔值。</li>
+<li>getPrototypeOf(target)：拦截Object.getPrototypeOf(proxy)，返回一个对象。</li>
+<li>isExtensible(target)：拦截Object.isExtensible(proxy)，返回一个布尔值。</li>
+<li>setPrototypeOf(target, proto)：拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。</li>
+<li>apply(target, object, args)：拦截 Proxy 实例作为函数调用的操作，比如proxy(…args)、proxy.call(object, …args)、proxy.apply(…)。</li>
+<li>construct(target, args)：拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(…args)。</li>
+</ol>
+<h3 id="3-proxy常用实例方法"><a href="#3-proxy常用实例方法" class="headerlink" title="3.proxy常用实例方法"></a>3.proxy常用实例方法</h3><ol>
+<li>get():用于拦截某个属性的读取操作，可接受三个参数。目标对象、属性名、proxy实例本身(可选)</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> person = &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;张三&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(person, &#123;</span><br><span class="line">  <span class="attr">get</span>: <span class="keyword">function</span>(<span class="params">target, propKey</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (propKey <span class="keyword">in</span> target) &#123;</span><br><span class="line">      <span class="keyword">return</span> target[propKey];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ReferenceError</span>(<span class="string">&quot;Prop name \&quot;&quot;</span> + propKey + <span class="string">&quot;\&quot; does not exist.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">proxy.<span class="property">name</span> <span class="comment">// &quot;张三&quot;</span></span><br><span class="line">proxy.<span class="property">age</span> <span class="comment">// 抛出一个错误</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>set():用来拦截某个属性的赋值操作，接收四个参数。目标对象、属性名、属性值、proxy实例本身(可选)</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> validator = &#123;</span><br><span class="line">  <span class="attr">set</span>: <span class="keyword">function</span>(<span class="params">obj, prop, value</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (prop === <span class="string">&#x27;age&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="title function_">isInteger</span>(value)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&#x27;The age is not an integer&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (value &gt; <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RangeError</span>(<span class="string">&#x27;The age seems invalid&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 对于满足条件的 age 属性以及其他属性，直接保存</span></span><br><span class="line">    obj[prop] = value;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> person = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;, validator);</span><br><span class="line"></span><br><span class="line">person.<span class="property">age</span> = <span class="number">100</span>;</span><br><span class="line">person.<span class="property">age</span> <span class="comment">// 100</span></span><br><span class="line">person.<span class="property">age</span> = <span class="string">&#x27;young&#x27;</span> <span class="comment">// 报错</span></span><br><span class="line">person.<span class="property">age</span> = <span class="number">300</span> <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>3.apply():拦截函数的调用、call、apply操作，接收三个参数。目标对象、目标对象的上下文对象、目标对象的参数数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> twice = &#123;</span><br><span class="line">  apply (target, ctx, args) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">apply</span>(...<span class="variable language_">arguments</span>) * <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sum</span> (left, right) &#123;</span><br><span class="line">  <span class="keyword">return</span> left + right;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(sum, twice);</span><br><span class="line"><span class="title function_">proxy</span>(<span class="number">1</span>, <span class="number">2</span>) <span class="comment">// 6</span></span><br><span class="line">proxy.<span class="title function_">call</span>(<span class="literal">null</span>, <span class="number">5</span>, <span class="number">6</span>) <span class="comment">// 22</span></span><br><span class="line">proxy.<span class="title function_">apply</span>(<span class="literal">null</span>, [<span class="number">7</span>, <span class="number">8</span>]) <span class="comment">// 30</span></span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>has():拦截HasProperty操作，判断对象是否有某个属性，即in运算符，接收两个参数。目标对象、需查询属性名。has对for in遍历不拦截。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handler = &#123;</span><br><span class="line">  has (target, key) &#123;</span><br><span class="line">    <span class="keyword">if</span> (key[<span class="number">0</span>] === <span class="string">&#x27;_&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> key <span class="keyword">in</span> target;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> target = &#123; <span class="attr">_prop</span>: <span class="string">&#x27;foo&#x27;</span>, <span class="attr">prop</span>: <span class="string">&#x27;foo&#x27;</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);</span><br><span class="line"><span class="string">&#x27;_prop&#x27;</span> <span class="keyword">in</span> proxy <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>construct():用于拦截new命令，接收三个参数。目标对象、构造函数的参数数组、创造实例参数时，new命令作用的构造函数。注意，construct必须返回一个对象，否则会报错。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="title class_">Proxy</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;, &#123;</span><br><span class="line">  <span class="attr">construct</span>: <span class="keyword">function</span>(<span class="params">target, args</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;called: &#x27;</span> + args.<span class="title function_">join</span>(<span class="string">&#x27;, &#x27;</span>));</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">value</span>: args[<span class="number">0</span>] * <span class="number">10</span> &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// p即为第三个参数</span></span><br><span class="line">(<span class="keyword">new</span> <span class="title function_">p</span>(<span class="number">1</span>)).<span class="property">value</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  <span class="attr">construct</span>: <span class="keyword">function</span>(<span class="params">target, args</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span> === handler); <span class="comment">// this指向proxy配置的拦截对象</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">target</span>(...args);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> p = <span class="keyword">new</span> <span class="title class_">Proxy</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;, handler);</span><br><span class="line"><span class="keyword">new</span> <span class="title function_">p</span>() <span class="comment">// true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>deleteProperty():用于拦截delete操作，接收两个参数。目标对象、删除key值。如果方法抛出错误或者返回false说明当前属性无法被delete删除。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> handler = &#123;</span><br><span class="line">  deleteProperty (target, key) &#123;</span><br><span class="line">    <span class="title function_">invariant</span>(key, <span class="string">&#x27;delete&#x27;</span>);</span><br><span class="line">    <span class="keyword">delete</span> target[key];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">invariant</span> (key, action) &#123;</span><br><span class="line">  <span class="keyword">if</span> (key[<span class="number">0</span>] === <span class="string">&#x27;_&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`Invalid attempt to <span class="subst">$&#123;action&#125;</span> private &quot;<span class="subst">$&#123;key&#125;</span>&quot; property`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> target = &#123; <span class="attr">_prop</span>: <span class="string">&#x27;foo&#x27;</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);</span><br><span class="line"><span class="keyword">delete</span> proxy.<span class="property">_prop</span></span><br><span class="line"><span class="comment">// Error: Invalid attempt to delete private &quot;_prop&quot; property</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog13/" title="Proxy概述及应用" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2023/02/14/blog13/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/OVYVO" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/yanblog.github.io/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/OVYVO" target="_blank"><span class="text-dark">若拙</span><small class="ml-1x">沪漂前端攻城狮</small></a></h3>
+        <div>醉后不知天在水，满船清梦压星河。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+  
+
+  
+</div>
+
+<nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+    
+    <ul class="pager pull-left">
+      
+      <li class="prev">
+        <a href="/yanblog.github.io/2023/02/14/blog12/" title="Reflect概述及应用"><i
+            class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      </li>
+      
+      
+      <li class="next">
+        <a href="/yanblog.github.io/2023/02/13/blog11/"
+          title="Generator函数及Async/Await"><span>下一篇&nbsp;&nbsp;</span><i
+            class="icon icon-angle-right" aria-hidden="true"></i></a>
+      </li>
+      
+      
+      <li class="toggle-toc">
+        <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+          title="文章目录" role="button">
+          <span>[&nbsp;</span><span>文章目录</span>
+          <i class="text-collapsed icon icon-anchor"></i>
+          <i class="text-in icon icon-close"></i>
+          <span>]</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal"
+      data-target="#donateModal"><span>赏</span></button>
+    <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+    
+
+    <div class="bar-right">
+      
+      <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+        data-mobile-sites="weibo,qq,qzone"></div>
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="publishby">
+            Theme base on pure
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/yanblog.github.io/js/plugin.min.js"></script>
+
+
+<script src="/yanblog.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/yanblog.github.io/',
+        CONTENT_URL: '/yanblog.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/yanblog.github.io/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
