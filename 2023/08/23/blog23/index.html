@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>MutationObserver概述及应用 | Yan&#39;s Blog</title>
+  <meta name="description" content="前言：紧接上文前端性能监控一文中在FMP,FCP算法设计中需要使用到MutationObserver对象进行一些DOM监控的操作，本文详细介绍一下MutationObserver Api  简介MutationObserver用于监控DOM树变化，提供了异步方法来监听DOM元素的增加、删除、属性变化操作。开发者可以借助此方法对DOM树变化做出相应的响应。 构造函数MutationObserver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MutationObserver概述及应用">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2023/08/23/blog23/index.html">
+<meta property="og:site_name" content="Yan&#39;s Blog">
+<meta property="og:description" content="前言：紧接上文前端性能监控一文中在FMP,FCP算法设计中需要使用到MutationObserver对象进行一些DOM监控的操作，本文详细介绍一下MutationObserver Api  简介MutationObserver用于监控DOM树变化，提供了异步方法来监听DOM元素的增加、删除、属性变化操作。开发者可以借助此方法对DOM树变化做出相应的响应。 构造函数MutationObserver">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-01-05T05:14:46.712Z">
+<meta property="article:author" content="OVYVO">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2023/08/23/blog23/index.html">
+  
+  <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
+  
+  
+  <link rel="icon" href="/yanblog.github.io/images/favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/yanblog.github.io/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/OVYVO" target="_blank">
+          <img class="img-circle img-rotate" src="/yanblog.github.io/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">若拙</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">沪漂前端攻城狮</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 上海 · 中国</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/yanblog.github.io/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/yanblog.github.io/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/yanblog.github.io/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/yanblog.github.io/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/yanblog.github.io/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/yanblog.github.io/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/yanblog.github.io/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/CSS/">CSS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/ES6/">ES6</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/taro/">taro</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/vue/">vue</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E8%B5%84%E6%BA%90/">资源</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <!-- <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/AIGC/" rel="tag">AIGC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Element/" rel="tag">Element</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-2/" rel="tag">vue-2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" rel="tag">代码规范</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div> -->
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/yanblog.github.io/tags/AIGC/" style="font-size: 13px;">AIGC</a> <a href="/yanblog.github.io/tags/Element/" style="font-size: 13.25px;">Element</a> <a href="/yanblog.github.io/tags/JS/" style="font-size: 14px;">JS</a> <a href="/yanblog.github.io/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/yanblog.github.io/tags/nginx/" style="font-size: 13px;">nginx</a> <a href="/yanblog.github.io/tags/vue-2/" style="font-size: 13px;">vue-2</a> <a href="/yanblog.github.io/tags/vue-3/" style="font-size: 13.75px;">vue-3</a> <a href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 13.25px;">代码规范</a> <a href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 13.5px;">小程序</a> <a href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 13.25px;">工具</a> <a href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">样式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/12/">十二月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/10/">十月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/08/">八月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/07/">七月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/12/08/blog27/" class="title">Nginx基本概念及使用方式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-12-07T16:00:00.000Z" itemprop="datePublished">2023-12-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/10/25/blog26/" class="title">Vue3富文本编辑器组件封装</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-25T00:00:00.000Z" itemprop="datePublished">2023-10-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E8%B5%84%E6%BA%90/">资源</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/09/05/blog24/" class="title">AI及设计相关</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-04T16:00:00.000Z" itemprop="datePublished">2023-09-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/08/23/blog23/" class="title">MutationObserver概述及应用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-08-22T16:00:00.000Z" itemprop="datePublished">2023-08-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/08/16/blog22/" class="title">前端性能优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-08-15T16:00:00.000Z" itemprop="datePublished">2023-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0MutationObserver"><span class="toc-number">2.</span> <span class="toc-text">构造函数MutationObserver()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.</span> <span class="toc-text">常见的使用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E5%AE%9E%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">场景实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E5%86%85%E5%AE%B9"><span class="toc-number">5.</span> <span class="toc-text">参考内容</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog23" class="article article-type-post" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      
+  
+    <h1 class="article-title" itemprop="name">
+      MutationObserver概述及应用
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/yanblog.github.io/2023/08/23/blog23/" class="article-date">
+	  <time datetime="2023-08-22T16:00:00.000Z" itemprop="datePublished">2023-08-23</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+      <blockquote>
+<p>前言：紧接上文前端性能监控一文中在FMP,FCP算法设计中需要使用到MutationObserver对象进行一些DOM监控的操作，本文详细介绍一下MutationObserver Api</p>
+</blockquote>
+<h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>MutationObserver用于监控DOM树变化，提供了异步方法来监听DOM元素的增加、删除、属性变化操作。开发者可以借助此方法对DOM树变化做出相应的响应。</p>
+<h4 id="构造函数MutationObserver"><a href="#构造函数MutationObserver" class="headerlink" title="构造函数MutationObserver()"></a>构造函数MutationObserver()</h4><p>DOM 规范中的 MutationObserver() 构造函数—是 MutationObserver 接口内容的一部分—创建并返回一个新的观察器，它会在触发指定 DOM 事件时，调用指定的回调函数。MutationObserver 对 DOM 的观察不会立即启动；而必须先调用 observe() 方法来确定，要监听哪一部分的 DOM 以及要响应哪些更改。</p>
+<p>observe参数:</p>
+<ul>
+<li>target: 需要观测的目标节点</li>
+<li>options:<ul>
+<li>attributes：是否监测元素的属性变化。</li>
+<li>attributeOldValue：是否在属性变化时记录旧值。</li>
+<li>attributeFilter：指定要监测的属性列表。</li>
+<li>childList：是否监测子元素的添加或移除。</li>
+<li>subtree：是否监测后代元素的变化。</li>
+<li>characterData：是否监测文本节点的内容变化。</li>
+<li>characterDataOldValue：是否在文本节点内容变化时记录旧值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 代码实例</span></span><br><span class="line"><span class="keyword">var</span> targetNode = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#someElement&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> observerOptions = &#123;</span><br><span class="line">  <span class="attr">childList</span>: <span class="literal">true</span>, <span class="comment">// 观察目标子节点的变化，是否有添加或者删除</span></span><br><span class="line">  <span class="attr">attributes</span>: <span class="literal">true</span>, <span class="comment">// 观察属性变动</span></span><br><span class="line">  <span class="attr">subtree</span>: <span class="literal">true</span>, <span class="comment">// 观察后代节点，默认为 false</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> <span class="title class_">MutationObserver</span>(callback);</span><br><span class="line">observer.<span class="title function_">observe</span>(targetNode, observerOptions);</span><br></pre></td></tr></table></figure>
+
+<h4 id="常见的使用场景"><a href="#常见的使用场景" class="headerlink" title="常见的使用场景"></a>常见的使用场景</h4><ol>
+<li>动态内容加载<br>当页面内容是异步加载或者说是动态生成时，可以使用MutationObserver来监控内容变化，并在变化后进行相应的处理，如页面更新，监听事件的绑定。例如：无限滚动场景下可以监听新内容加载到页面，在DOM变化后添加相应的元素或事件。</li>
+<li>表单输入动态验证<br>当需要实时校验用户输入内容时，使用MutationObserver来监控表单内容，值的变化以及禁用状态等，即可实现表单的动态校验。</li>
+<li>响应式布局<br>当页面布局需要根据DOM变化自适应调整时，使用MutationObserver来监测相关元素的变化，并根据变化动态地调整页面布局。例如，在响应式网页设计中，当窗口大小发生变化或元素被添加或移除时，可以使用MutationObserver来监听相关元素的变化，并根据变化重新计算和调整页面布局，以适应不同的设备和屏幕尺寸。</li>
+<li>组件内部监听<br>在自定义组件的开发中，MutationObserver可以用于监听组件内部的DOM变化，以及对应的属性变化。这样可以在组件内部做出相应的处理，如更新组件的状态、重新渲染组件等。例如，当一个自定义组件中的某个子元素被添加或移除时，可以使用MutationObserver来监听这些变化，并在变化发生后更新组件的状态或重新渲染组件。</li>
+</ol>
+<h4 id="场景实例"><a href="#场景实例" class="headerlink" title="场景实例"></a>场景实例</h4><ol>
+<li>动态校验表单元素</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 目标元素（表单）</span></span><br><span class="line"><span class="keyword">const</span> form = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#myForm&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个 MutationObserver 实例</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">MutationObserver</span>(<span class="function">(<span class="params">mutationsList</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 在每次变化时进行处理</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> mutation <span class="keyword">of</span> mutationsList) &#123;</span><br><span class="line">    <span class="comment">// 检查是否是值发生变化的子节点</span></span><br><span class="line">    <span class="keyword">if</span> (mutation.<span class="property">type</span> === <span class="string">&#x27;childList&#x27;</span> &amp;&amp; mutation.<span class="property">target</span>.<span class="property">nodeName</span> === <span class="string">&#x27;INPUT&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 执行动态校验逻辑</span></span><br><span class="line">      <span class="title function_">validateForm</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 检查是否是属性变化</span></span><br><span class="line">    <span class="keyword">if</span> (mutation.<span class="property">type</span> === <span class="string">&#x27;attributes&#x27;</span> &amp;&amp; mutation.<span class="property">attributeName</span> === <span class="string">&#x27;disabled&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 执行动态校验逻辑</span></span><br><span class="line">      <span class="title function_">validateForm</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置 MutationObserver 监听的类型和目标节点</span></span><br><span class="line"><span class="keyword">const</span> config = &#123; <span class="attr">childList</span>: <span class="literal">true</span>, <span class="attr">attributes</span>: <span class="literal">true</span>, <span class="attr">subtree</span>: <span class="literal">true</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 开始观察表单的变化</span></span><br><span class="line">observer.<span class="title function_">observe</span>(form, config);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态校验表单内容的函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">validateForm</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 获取表单元素</span></span><br><span class="line">  <span class="keyword">const</span> input1 = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#input1&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> input2 = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#input2&#x27;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 获取表单元素的值和禁用状态</span></span><br><span class="line">  <span class="keyword">const</span> value1 = input1.<span class="property">value</span>;</span><br><span class="line">  <span class="keyword">const</span> value2 = input2.<span class="property">value</span>;</span><br><span class="line">  <span class="keyword">const</span> disabled1 = input1.<span class="property">disabled</span>;</span><br><span class="line">  <span class="keyword">const</span> disabled2 = input2.<span class="property">disabled</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 执行校验逻辑</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>响应式布局</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建 MutationObserver 实例</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">MutationObserver</span>(<span class="keyword">function</span>(<span class="params">mutationsList</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> mutation <span class="keyword">of</span> mutationsList) &#123;</span><br><span class="line">    <span class="keyword">if</span> (mutation.<span class="property">type</span> === <span class="string">&#x27;childList&#x27;</span>) &#123;</span><br><span class="line">      <span class="comment">// 子节点被添加或移除的处理逻辑</span></span><br><span class="line">      <span class="title function_">adjustLayout</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置 MutationObserver 监听的类型和目标节点</span></span><br><span class="line"><span class="keyword">const</span> config = &#123; <span class="attr">childList</span>: <span class="literal">true</span>, <span class="attr">subtree</span>: <span class="literal">true</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 开始观察窗口大小变化和元素添加或移除</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, adjustLayout);</span><br><span class="line">observer.<span class="title function_">observe</span>(<span class="variable language_">document</span>.<span class="property">body</span>, config);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化页面布局</span></span><br><span class="line"><span class="title function_">adjustLayout</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 页面布局调整函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">adjustLayout</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 获取窗口宽度</span></span><br><span class="line">  <span class="keyword">const</span> windowWidth = <span class="variable language_">window</span>.<span class="property">innerWidth</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 根据窗口宽度调整布局</span></span><br><span class="line">  <span class="keyword">if</span> (windowWidth &gt; <span class="number">1024</span>) &#123;</span><br><span class="line">    <span class="comment">// 大屏幕布局</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (windowWidth &gt; <span class="number">768</span>) &#123;</span><br><span class="line">    <span class="comment">// 中屏幕布局</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 小屏幕布局</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h4><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver">MDN Web Docs - MutationObserver</a></p>
+<blockquote>
+<p>注：实例代码均由ChatGpt生成</p>
+</blockquote>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2023/08/23/blog23/" title="MutationObserver概述及应用" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2023/08/23/blog23/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/OVYVO" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/yanblog.github.io/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/OVYVO" target="_blank"><span class="text-dark">若拙</span><small class="ml-1x">沪漂前端攻城狮</small></a></h3>
+        <div>醉后不知天在水，满船清梦压星河。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+  
+
+  
+</div>
+
+<nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+    
+    <ul class="pager pull-left">
+      
+      <li class="prev">
+        <a href="/yanblog.github.io/2023/09/05/blog24/" title="AI及设计相关"><i
+            class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      </li>
+      
+      
+      <li class="next">
+        <a href="/yanblog.github.io/2023/08/16/blog22/"
+          title="前端性能优化"><span>下一篇&nbsp;&nbsp;</span><i
+            class="icon icon-angle-right" aria-hidden="true"></i></a>
+      </li>
+      
+      
+      <li class="toggle-toc">
+        <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+          title="文章目录" role="button">
+          <span>[&nbsp;</span><span>文章目录</span>
+          <i class="text-collapsed icon icon-anchor"></i>
+          <i class="text-in icon icon-close"></i>
+          <span>]</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal"
+      data-target="#donateModal"><span>赏</span></button>
+    <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+    
+
+    <div class="bar-right">
+      
+      <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+        data-mobile-sites="weibo,qq,qzone"></div>
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="publishby">
+            Theme base on pure
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/yanblog.github.io/js/plugin.min.js"></script>
+
+
+<script src="/yanblog.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/yanblog.github.io/',
+        CONTENT_URL: '/yanblog.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/yanblog.github.io/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

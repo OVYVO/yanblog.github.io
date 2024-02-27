@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Nginx基本概念及使用方式 | Yan&#39;s Blog</title>
+  <meta name="description" content="Nginx相关概念 简单请求与非简单请求 请求方法是HEAD、GET、POST三种之一，并且HTTP头信息限于Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type（限于application&#x2F;x-www-form-urlencoded、multipart&#x2F;form-data、text&#x2F;plain）即为简单请求，其余皆为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx基本概念及使用方式">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2023/12/08/blog27/index.html">
+<meta property="og:site_name" content="Yan&#39;s Blog">
+<meta property="og:description" content="Nginx相关概念 简单请求与非简单请求 请求方法是HEAD、GET、POST三种之一，并且HTTP头信息限于Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type（限于application&#x2F;x-www-form-urlencoded、multipart&#x2F;form-data、text&#x2F;plain）即为简单请求，其余皆为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-01-05T05:58:54.238Z">
+<meta property="article:author" content="OVYVO">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2023/12/08/blog27/index.html">
+  
+  <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
+  
+  
+  <link rel="icon" href="/yanblog.github.io/images/favicon.jpg" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/yanblog.github.io/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/OVYVO" target="_blank">
+          <img class="img-circle img-rotate" src="/yanblog.github.io/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">若拙</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">沪漂前端攻城狮</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> 上海 · 中国</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav menu-highlight">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/yanblog.github.io/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/yanblog.github.io/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/yanblog.github.io/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/yanblog.github.io/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/yanblog.github.io/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/yanblog.github.io/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/yanblog.github.io/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/CSS/">CSS</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/ES6/">ES6</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/taro/">taro</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/vue/">vue</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/yanblog.github.io/categories/%E8%B5%84%E6%BA%90/">资源</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <!-- <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/AIGC/" rel="tag">AIGC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Element/" rel="tag">Element</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/JS/" rel="tag">JS</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/Linux/" rel="tag">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-2/" rel="tag">vue-2</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" rel="tag">代码规范</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">小程序</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div> -->
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/yanblog.github.io/tags/AIGC/" style="font-size: 13px;">AIGC</a> <a href="/yanblog.github.io/tags/Element/" style="font-size: 13.25px;">Element</a> <a href="/yanblog.github.io/tags/JS/" style="font-size: 14px;">JS</a> <a href="/yanblog.github.io/tags/Linux/" style="font-size: 13px;">Linux</a> <a href="/yanblog.github.io/tags/nginx/" style="font-size: 13px;">nginx</a> <a href="/yanblog.github.io/tags/vue-2/" style="font-size: 13px;">vue-2</a> <a href="/yanblog.github.io/tags/vue-3/" style="font-size: 13.75px;">vue-3</a> <a href="/yanblog.github.io/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 13.25px;">代码规范</a> <a href="/yanblog.github.io/tags/%E5%B0%8F%E7%A8%8B%E5%BA%8F/" style="font-size: 13.5px;">小程序</a> <a href="/yanblog.github.io/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 13.25px;">工具</a> <a href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" style="font-size: 13px;">样式</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/12/">十二月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/10/">十月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/09/">九月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/08/">八月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/07/">七月 2023</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/06/">六月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/05/">五月 2023</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/03/">三月 2023</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/12/">十二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/11/">十一月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/10/">十月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2021/10/">十月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/yanblog.github.io/archives/2020/04/">四月 2020</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/12/08/blog27/" class="title">Nginx基本概念及使用方式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-12-07T16:00:00.000Z" itemprop="datePublished">2023-12-08</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/10/25/blog26/" class="title">Vue3富文本编辑器组件封装</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-10-25T00:00:00.000Z" itemprop="datePublished">2023-10-25</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E8%B5%84%E6%BA%90/">资源</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/09/05/blog24/" class="title">AI及设计相关</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-09-04T16:00:00.000Z" itemprop="datePublished">2023-09-05</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/08/23/blog23/" class="title">MutationObserver概述及应用</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-08-22T16:00:00.000Z" itemprop="datePublished">2023-08-23</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/yanblog.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/yanblog.github.io/2023/08/16/blog22/" class="title">前端性能优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-08-15T16:00:00.000Z" itemprop="datePublished">2023-08-16</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<aside class="sidebar sidebar-toc" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <nav id="toc" class="article-toc">
+      <h3 class="toc-title">文章目录</h3>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">Nginx相关概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx%E6%93%8D%E4%BD%9C%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">Nginx操作常用命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx%E9%85%8D%E7%BD%AE"><span class="toc-number">3.</span> <span class="toc-text">Nginx配置</span></a></li></ol>
+    </nav>
+  </div>
+</aside>
+
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-blog27" class="article article-type-post" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Nginx基本概念及使用方式
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/yanblog.github.io/2023/12/08/blog27/" class="article-date">
+	  <time datetime="2023-12-07T16:00:00.000Z" itemprop="datePublished">2023-12-08</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/yanblog.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/nginx/" rel="tag">nginx</a>
+  </span>
+
+
+        
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+
+
+        
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+      <h4 id="Nginx相关概念"><a href="#Nginx相关概念" class="headerlink" title="Nginx相关概念"></a>Nginx相关概念</h4><ol>
+<li><p>简单请求与非简单请求<br> 请求方法是HEAD、GET、POST三种之一，并且HTTP头信息限于Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type（限于application/x-www-form-urlencoded、multipart/form-data、text/plain）即为简单请求，其余皆为非简单请求。简单请求与非简单请求区别体现在服务器对请求响应的预处理以及请求信息设置还有返回信息的处理上，不详细表述，可自行查阅相关文档。</p>
+</li>
+<li><p>跨域<br>开发几乎都知道，不详细表述</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//同源的例子</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com/app1/index.html  //只是路径不同</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com/app2/index.html</span></span><br><span class="line"></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//Example.com:80  //只是大小写差异</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//不同源的例子</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com/app1   //协议不同</span></span><br><span class="line"><span class="attr">https</span>:<span class="comment">//example.com/app2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com        //host 不同</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//www.example.com</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//myapp.example.com</span></span><br><span class="line"></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com        //端口不同</span></span><br><span class="line"><span class="attr">http</span>:<span class="comment">//example.com:8080</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>正向代理与反向代理<br>正向代理：客户端-&gt;代理服务器-&gt;目标服务器，客户端向代理服务器发送请求指定目标服务器，由代理服务器与目标服务器进行数据交换，再又代理服务器将数据返回给客户端。理解：翻墙工具<br>反向代理：客户端-&gt;代理服务器-&gt;服务器集群，客户端发送请求给代理服务器，代理服务器将请求再分发给服务器集群，具体哪个服务器处理信息不知道，使得真实处理的服务器对客户端不可见。理解：商店买东西，明确买什么商品，商店采购，商店扮演的就是反向服务器角色。</p>
+</li>
+<li><p>负载均衡<br>请求并发不多的情况下，服务器能够正常响应所有的请求，网络响应快速。当并发量上来了之后，单一的服务器不能同时处理太多的请求。此时只能将服务器性能提高。或者采用负载均衡的做法，简单理解就是，使用多台服务器形成一个服务器集群，当大规模的请求来临的时候，由Nginx充当协调员角色，将请求分发到不同的服务器去处理并返回响应。</p>
+</li>
+<li><p>动静分离<br>将服务器上的静态资源与动态资源分离。根据不同的请求类型请求对应的资源，还可以利用nginx缓存的优势更快的响应资源请求。</p>
+</li>
+</ol>
+<h4 id="Nginx操作常用命令"><a href="#Nginx操作常用命令" class="headerlink" title="Nginx操作常用命令"></a>Nginx操作常用命令</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload  <span class="comment"># 向主进程发送信号，重新加载配置文件，热重启</span></span><br><span class="line">nginx -s reopen	 <span class="comment"># 重启 Nginx</span></span><br><span class="line">nginx -s stop    <span class="comment"># 快速关闭</span></span><br><span class="line">nginx -s quit    <span class="comment"># 等待工作进程处理完成后关闭</span></span><br><span class="line">nginx -T         <span class="comment"># 查看当前 Nginx 最终的配置</span></span><br><span class="line">nginx -t -c &lt;配置路径&gt;    <span class="comment"># 检查配置是否有问题，如果已经在配置目录，则不需要-c</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Nginx配置"><a href="#Nginx配置" class="headerlink" title="Nginx配置"></a>Nginx配置</h4><ul>
+<li><p>主配置文件/etc/nginx/nginx.conf</p>
+</li>
+<li><p>nginx.config结构图:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">main        <span class="comment"># 全局配置，对全局生效</span></span><br><span class="line">├── events  <span class="comment"># 配置影响 Nginx 服务器或与用户的网络连接</span></span><br><span class="line">├── http    <span class="comment"># 配置代理，缓存，日志定义等绝大多数功能和第三方模块的配置</span></span><br><span class="line">│   ├── upstream <span class="comment"># 配置后端服务器具体地址，负载均衡配置不可或缺的部分</span></span><br><span class="line">│   ├── server   <span class="comment"># 配置虚拟主机的相关参数，一个 http 块中可以有多个 server 块</span></span><br><span class="line">│   ├── server</span><br><span class="line">│   │   ├── location  <span class="comment"># server 块可以包含多个 location 块，location 指令用于匹配 uri</span></span><br><span class="line">│   │   ├── location</span><br><span class="line">│   │   └── ...</span><br><span class="line">│   └── ...</span><br><span class="line">└── ...</span><br></pre></td></tr></table></figure></li>
+<li><p>配置实例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">user  nginx;                        <span class="comment"># 运行用户，默认即是nginx，可以不进行设置</span></span><br><span class="line">worker_processes  1;                <span class="comment"># Nginx 进程数，一般设置为和 CPU 核数一样</span></span><br><span class="line">error_log  /var/log/nginx/error.log warn;   <span class="comment"># Nginx 的错误日志存放目录</span></span><br><span class="line">pid        /var/run/nginx.pid;      <span class="comment"># Nginx 服务启动时的 pid 存放位置</span></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">  use epoll;     <span class="comment"># 使用epoll的I/O模型(如果你不知道Nginx该使用哪种轮询方法，会自动选择一个最适合你操作系统的)</span></span><br><span class="line">  worker_connections 1024;   <span class="comment"># 每个进程允许最大并发数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;   <span class="comment"># 配置使用最频繁的部分，代理、缓存、日志定义等绝大多数功能和第三方模块的配置都在这里设置</span></span><br><span class="line">  <span class="comment"># 设置日志模式</span></span><br><span class="line">  log_format  main  <span class="string">&#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span></span><br><span class="line">                    <span class="string">&#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span></span><br><span class="line">                    <span class="string">&#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  access_log  /var/log/nginx/access.log  main;   <span class="comment"># Nginx访问日志存放位置</span></span><br><span class="line"></span><br><span class="line">  sendfile            on;   <span class="comment"># 开启高效传输模式</span></span><br><span class="line">  tcp_nopush          on;   <span class="comment"># 减少网络报文段的数量</span></span><br><span class="line">  tcp_nodelay         on;</span><br><span class="line">  keepalive_timeout   65;   <span class="comment"># 保持连接的时间，也叫超时时间，单位秒</span></span><br><span class="line">  types_hash_max_size 2048;</span><br><span class="line"></span><br><span class="line">  include             /etc/nginx/mime.types;      <span class="comment"># 文件扩展名与类型映射表</span></span><br><span class="line">  default_type        application/octet-stream;   <span class="comment"># 默认文件类型</span></span><br><span class="line"></span><br><span class="line">  include /etc/nginx/conf.d/*.conf;   <span class="comment"># 加载子配置项</span></span><br><span class="line">  </span><br><span class="line">  server &#123;</span><br><span class="line">    listen       80;       <span class="comment"># 配置监听的端口</span></span><br><span class="line">    server_name  localhost;    <span class="comment"># 配置的域名</span></span><br><span class="line">    </span><br><span class="line">    location / &#123;</span><br><span class="line">      root   /usr/share/nginx/html;  <span class="comment"># 网站根目录</span></span><br><span class="line">      index  index.html index.htm;   <span class="comment"># 默认首页文件</span></span><br><span class="line">      deny 172.168.22.11;   <span class="comment"># 禁止访问的ip地址，可以为all</span></span><br><span class="line">      allow 172.168.33.44； <span class="comment"># 允许访问的ip地址，可以为all</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    error_page 500 502 503 504 /50x.html;  <span class="comment"># 默认50x对应的访问页面</span></span><br><span class="line">    error_page 400 404 error.html;   <span class="comment"># 同上</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>全局变量</p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$host</td>
+<td>请求信息中的 Host，如果请求中没有 Host 行，则等于设置的服务器名，不包含端口</td>
+</tr>
+<tr>
+<td>$request_method</td>
+<td>客户端请求类型，如 GET、POST</td>
+</tr>
+<tr>
+<td>$remote_addr</td>
+<td>客户端的 IP 地址</td>
+</tr>
+<tr>
+<td>$args</td>
+<td>请求参数</td>
+</tr>
+<tr>
+<td>$arg_PARAMETER</td>
+<td>GET 请求中变量名 PARAMETER 参数的值，例如：$http_user_agent(Uaer-Agent 值)…</td>
+</tr>
+<tr>
+<td>$content_length</td>
+<td>请求头中的 Content-length 字段</td>
+</tr>
+<tr>
+<td>$http_user_agent</td>
+<td>客户端agent信息</td>
+</tr>
+<tr>
+<td>$http_cookie</td>
+<td>客户端cookie信息</td>
+</tr>
+<tr>
+<td>$remote_addr</td>
+<td>客户端的IP地址</td>
+</tr>
+<tr>
+<td>$remote_port</td>
+<td>客户端端口</td>
+</tr>
+<tr>
+<td>$http_user_agent</td>
+<td>客户端agent信息</td>
+</tr>
+<tr>
+<td>$server_protocol</td>
+<td>请求使用的协议，如 HTTP/1.0、HTTP/1.1</td>
+</tr>
+<tr>
+<td>$server_addr</td>
+<td>服务器地址</td>
+</tr>
+<tr>
+<td>$server_name</td>
+<td>服务器名称</td>
+</tr>
+<tr>
+<td>$server_port</td>
+<td>服务器端口号</td>
+</tr>
+<tr>
+<td>$scheme</td>
+<td>HTTP 方法（如http，https）</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>反向代理配置</p>
+<ol>
+<li>简单配置，例如前端api接口请求转发<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">  listen 80;</span><br><span class="line">  server_name localhost;</span><br><span class="line"></span><br><span class="line">  location /api &#123;</span><br><span class="line">    proxy_pass http://www.xxx.com;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>请求转发<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">  listen 80;</span><br><span class="line">  server_name localhost;</span><br><span class="line"></span><br><span class="line">  // 把访问 http://127.0.0.1:9001/edu 的请求转发到 http://127.0.0.1:8080</span><br><span class="line">  // 把访问 http://127.0.0.1:9001/vod 的请求转发到 http://127.0.0.1:8081</span><br><span class="line">  </span><br><span class="line">  location ~ /edu/ &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location ~ /vod/ &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8081;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>跨域配置</p>
+<ol>
+<li>反向代理处理跨域问题<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen 9001;</span><br><span class="line">  server_name a.abc.com;</span><br><span class="line"></span><br><span class="line">  // 假设a、b都是服务器的二级域名，指向的ip都一样但是二级域名间请求仍然会跨域</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">    proxy_pass b.abc.com;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+以上配置会将a.abc.com的请求全部代理到b.abc.com，通常情况下不需要代理全部的请求，所以可以使用请求的后缀来区分静态资源与动态资源的区分。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 请求跨域，约定代理后端服务请求path以/apis/开头</span></span><br><span class="line">location ^~/api/ &#123;</span><br><span class="line">  <span class="comment"># 这里重写了请求，将正则匹配中的第一个分组的path拼接到真正的请求后面，并用break停止后续匹配</span></span><br><span class="line">  rewrite ^/apis/(.*)$ /<span class="variable">$1</span> <span class="built_in">break</span>;</span><br><span class="line">  proxy_pass b.abc.com;</span><br><span class="line"></span><br><span class="line">  <span class="comment"># 两个域名之间cookie的传递与回写</span></span><br><span class="line">  proxy_cookie_domain a.abc.com b.abc.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>设置请求头处理跨域问题<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/nginx/conf.d/b.conf</span></span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  listen       80;</span><br><span class="line">  server_name  b.abc.com;</span><br><span class="line">  </span><br><span class="line">  add_header <span class="string">&#x27;Access-Control-Allow-Origin&#x27;</span> <span class="variable">$http_origin</span>;   <span class="comment"># 全局变量获得当前请求origin，带cookie的请求不支持*</span></span><br><span class="line">  add_header <span class="string">&#x27;Access-Control-Allow-Credentials&#x27;</span> <span class="string">&#x27;true&#x27;</span>;    <span class="comment"># 为 true 可带上 cookie</span></span><br><span class="line">  add_header <span class="string">&#x27;Access-Control-Allow-Methods&#x27;</span> <span class="string">&#x27;GET, POST, OPTIONS&#x27;</span>;  <span class="comment"># 允许请求方法</span></span><br><span class="line">  add_header <span class="string">&#x27;Access-Control-Allow-Headers&#x27;</span> <span class="variable">$http_access_control_request_headers</span>;  <span class="comment"># 允许请求的 header，可以为 *</span></span><br><span class="line">  add_header <span class="string">&#x27;Access-Control-Expose-Headers&#x27;</span> <span class="string">&#x27;Content-Length,Content-Range&#x27;</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable">$request_method</span> = <span class="string">&#x27;OPTIONS&#x27;</span>) &#123;</span><br><span class="line">    add_header <span class="string">&#x27;Access-Control-Max-Age&#x27;</span> 1728000;   <span class="comment"># OPTIONS 请求的有效期，在有效期内不用发出另一条预检请求</span></span><br><span class="line">    add_header <span class="string">&#x27;Content-Type&#x27;</span> <span class="string">&#x27;text/plain; charset=utf-8&#x27;</span>;</span><br><span class="line">    add_header <span class="string">&#x27;Content-Length&#x27;</span> 0;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">return</span> 204;                  <span class="comment"># 200 也可以</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">    root  /usr/share/nginx/html/b;</span><br><span class="line">    index index.html;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>开启gzip<br>nginx配置gzip需要配合前端工程打包成gzip模式才能正常使用。例如vite中使用vite-plugin-compression插件打包资源文件，<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_gzip_module.html">配置参考</a></p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/nginx/conf.d/gzip.conf</span></span><br><span class="line">gzip on; <span class="comment"># 默认off，是否开启gzip</span></span><br><span class="line">gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript; <span class="comment"># 采用gzip压缩的MIME文件类型</span></span><br><span class="line">gzip_static on; <span class="comment"># 默认 off，该模块启用后，Nginx 首先检查是否存在请求静态文件的 gz 结尾的文件，如果有则直接返回该 .gz 文件内容</span></span><br><span class="line">gzip_proxied any; <span class="comment"># 默认 off，nginx做为反向代理时启用，用于设置启用或禁用从代理服务器上收到相应内容 gzip 压缩</span></span><br><span class="line">gzip_vary on; <span class="comment"># 用于在响应消息头中添加 Vary：Accept-Encoding，使代理服务器根据请求头中的 Accept-Encoding 识别是否启用 gzip 压缩</span></span><br><span class="line">gzip_comp_level 6; <span class="comment"># gzip 压缩比，压缩级别是 1-9，1 压缩级别最低，9 最高，级别越高压缩率越大，压缩时间越长，建议 4-6</span></span><br><span class="line">gzip_buffers 16 8k; <span class="comment"># 获取多少内存用于缓存压缩结果，16 8k 表示以 8k*16 为单位获得</span></span><br><span class="line">gzip_min_length 1k; <span class="comment"># 设置最低压缩文件大小</span></span><br><span class="line">gzip_http_version 1.1; <span class="comment"># 默认 1.1，启用 gzip 所需的 HTTP 最低版本</span></span><br></pre></td></tr></table></figure></li>
+<li><p>负载均衡<br>nginx配置负载均衡有几种分配方式</p>
+<ol>
+<li>轮询，默认方式，每个请求按时间顺序逐一分配到不同的后端服务器，如果后端服务挂了，能自动剔除；</li>
+<li>weight，权重分配，指定轮询几率，权重越高，在被访问的概率越大，用于后端服务器性能不均的情况；</li>
+<li>ip_hash，每个请求按访问 IP 的 hash 结果分配，这样每个访客固定访问一个后端服务器，可以解决动态网页 session 共享问题。负载均衡每次请求都会重新定位到服务器集群中的某一个，那么已经登录某一个服务器的用户再重新定位到另一个服务器，其登录信息将会丢失，这样显然是不妥的；</li>
+<li>fair（第三方），按后端服务器的响应时间分配，响应时间短的优先分配，依赖第三方插件 nginx-upstream-fair，需要先安装；<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">  upstream myserver &#123;</span><br><span class="line">    <span class="comment"># ip_hash;  # ip_hash 方式</span></span><br><span class="line">    <span class="comment"># fair;   # fair 方式</span></span><br><span class="line">    server 127.0.0.1:8081;  <span class="comment"># 负载均衡目的服务地址</span></span><br><span class="line">    server 127.0.0.1:8080;</span><br><span class="line">    server 127.0.0.1:8082 weight=10;  <span class="comment"># weight 方式，不写默认为 1</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">      proxy_pass http://myserver;</span><br><span class="line">      proxy_connect_timeout 10;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>配置动静分离<br>通过请求后缀名匹配不同资源请求方式实现动静分离，另外可以给静态资源文件设置expires设置缓存时间，从而减少客户端请求的时间。</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  location / &#123;</span><br><span class="line">    root /dist/;</span><br><span class="line">    index index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  location /image &#123;</span><br><span class="line">    root /dist/images;</span><br><span class="line">    autoindex on; <span class="comment"># 开启静态资源列目录</span></span><br><span class="line">    autoindex_exact_size    off;   <span class="comment"># on(默认)显示文件的确切大小，单位是byte；off显示文件大概大小，单位KB、MB、GB</span></span><br><span class="line">    autoindex_localtime     off;   <span class="comment"># off(默认)时显示的文件时间为GMT时间；on显示的文件时间为服务器时间</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>移动端pc端适配</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># /etc/nginx/conf.d/a.abc.com.conf</span></span><br><span class="line">server &#123;</span><br><span class="line">  listen 80;</span><br><span class="line">  server_name a.abc.com;</span><br><span class="line"></span><br><span class="line">  location / &#123;</span><br><span class="line">    root  /usr/share/nginx/html/pc;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$http_user_agent</span> ~* <span class="string">&#x27;(Android|webOS|iPhone|iPod|BlackBerry)&#x27;</span>) &#123;</span><br><span class="line">      root /usr/share/nginx/html/mobile;</span><br><span class="line">    &#125;</span><br><span class="line">    index index.html;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>图片防盗链</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen       80;        </span><br><span class="line">  server_name  xxx;</span><br><span class="line">  </span><br><span class="line">  <span class="comment"># 图片防盗链</span></span><br><span class="line">  location ~* \.(gif|jpg|jpeg|png|bmp|swf)$ &#123;</span><br><span class="line">    valid_referers none blocked server_names ~\.google\. ~\.baidu\. *.qq.com;  <span class="comment"># 只允许本机 IP 外链引用</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$invalid_referer</span>)&#123;</span><br><span class="line">      <span class="built_in">return</span> 403;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>配置图片，字体等静态文件缓存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 图片缓存时间设置</span></span><br><span class="line">location ~ .*\.(css|js|jpg|png|gif|swf|woff|woff2|eot|svg|ttf|otf|mp3|m4a|aac|txt)$ &#123;</span><br><span class="line">  expires 10d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果不希望缓存</span></span><br><span class="line">expires -1;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>以上只涉及到nginx部分常用配置，掌握了这些基本上就能cover住nginx操作，因为平时仅负责前端开发部分的工作，服务器方面实践比较少，仅以此文记录一下方便以后参考。</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2023/12/08/blog27/" title="Nginx基本概念及使用方式" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2023/12/08/blog27/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/OVYVO" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/yanblog.github.io/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/OVYVO" target="_blank"><span class="text-dark">若拙</span><small class="ml-1x">沪漂前端攻城狮</small></a></h3>
+        <div>醉后不知天在水，满船清梦压星河。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+  
+
+  
+</div>
+
+<nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+    
+    <ul class="pager pull-left">
+      
+      
+      <li class="next">
+        <a href="/yanblog.github.io/2023/10/25/blog26/"
+          title="Vue3富文本编辑器组件封装"><span>下一篇&nbsp;&nbsp;</span><i
+            class="icon icon-angle-right" aria-hidden="true"></i></a>
+      </li>
+      
+      
+      <li class="toggle-toc">
+        <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+          title="文章目录" role="button">
+          <span>[&nbsp;</span><span>文章目录</span>
+          <i class="text-collapsed icon icon-anchor"></i>
+          <i class="text-in icon icon-close"></i>
+          <span>]</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+    
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal"
+      data-target="#donateModal"><span>赏</span></button>
+    <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+    
+
+    <div class="bar-right">
+      
+      <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+        data-mobile-sites="weibo,qq,qzone"></div>
+      
+    </div>
+  </div>
+</nav>
+
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/yanblog.github.io/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+    
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/OVYVO" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Facebook" data-toggle=tooltip data-placement=top><i class="icon icon-facebook"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/yanblog.github.io/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+        
+        <div class="publishby">
+            Theme base on pure
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/yanblog.github.io/js/plugin.min.js"></script>
+
+
+<script src="/yanblog.github.io/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/yanblog.github.io/',
+        CONTENT_URL: '/yanblog.github.io/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/yanblog.github.io/js/insight.js"></script>
+
+
+
+
+
+
+   
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
