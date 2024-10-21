@@ -17,21 +17,23 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>一行代码-网站变灰 | Yan&#39;s Blog</title>
-  <meta name="description" content="功能实现 在出现一些突发情况下需要快速将web端页面变灰的需求的时候，仅用一个属性即可让整个项目实现：  1filter: grayscale(1) &#x2F;&#x2F; 参数为0-1的数值 在body内联样式添加如下代码实现全站变灰 1&lt;body style&#x3D;&quot;filter:grayscale(1);-webkit-filter:grayscale(1)&quot;&gt;&lt;&#x2F;body&amp;g">
+  <title>前端WebTerminal解决方案 | Yan&#39;s Blog</title>
+  <meta name="description" content="1.需求背景后台管理类项目中经常有一种需求场景—在前端页面操作远程服务器，告别终端。伴随此功能的往往还有内置命令，快捷键操作等附加需求。由于浏览器安全策略，想在前端项目中通过 js 或者是其他的方式唤起操作系统的终端程序，基本上没有这种可能。所以基于前端可以实现一个伪终端输入窗口，配合后端服务支持实现类似终端程序的效果。 2.技术调研   插件 问题 推荐指数    Xterm 主流方案 ⭐️⭐️">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一行代码-网站变灰">
-<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2022/12/01/blog10/index.html">
+<meta property="og:title" content="前端WebTerminal解决方案">
+<meta property="og:url" content="https://ovyvo.github.io/yanblog.github.io/2024/10/21/blog31/index.html">
 <meta property="og:site_name" content="Yan&#39;s Blog">
-<meta property="og:description" content="功能实现 在出现一些突发情况下需要快速将web端页面变灰的需求的时候，仅用一个属性即可让整个项目实现：  1filter: grayscale(1) &#x2F;&#x2F; 参数为0-1的数值 在body内联样式添加如下代码实现全站变灰 1&lt;body style&#x3D;&quot;filter:grayscale(1);-webkit-filter:grayscale(1)&quot;&gt;&lt;&#x2F;body&amp;g">
+<meta property="og:description" content="1.需求背景后台管理类项目中经常有一种需求场景—在前端页面操作远程服务器，告别终端。伴随此功能的往往还有内置命令，快捷键操作等附加需求。由于浏览器安全策略，想在前端项目中通过 js 或者是其他的方式唤起操作系统的终端程序，基本上没有这种可能。所以基于前端可以实现一个伪终端输入窗口，配合后端服务支持实现类似终端程序的效果。 2.技术调研   插件 问题 推荐指数    Xterm 主流方案 ⭐️⭐️">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-11-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-07-08T07:32:07.354Z">
+<meta property="og:image" content="https://gitee.com/vae12306/image_bed/raw/master/images/202410211620286.png">
+<meta property="article:published_time" content="2024-10-21T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-21T08:29:54.317Z">
 <meta property="article:author" content="OVYVO">
-<meta property="article:tag" content="样式">
+<meta property="article:tag" content="vue-3">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/vae12306/image_bed/raw/master/images/202410211620286.png">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2022/12/01/blog10/index.html">
+  <link rel="canonical" href="https://ovyvo.github.io/yanblog.github.io/2024/10/21/blog31/index.html">
   
   <link rel="alternate" href="/atom.xml" title="Yan&#39;s Blog" type="application/atom+xml">
   
@@ -341,14 +343,14 @@
   <div class="slimContent">
     <nav id="toc" class="article-toc">
       <h3 class="toc-title">文章目录</h3>
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.</span> <span class="toc-text">功能实现</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%9C%80%E6%B1%82%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">1.需求背景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%8A%80%E6%9C%AF%E8%B0%83%E7%A0%94"><span class="toc-number">2.</span> <span class="toc-text">2.技术调研</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%8A%80%E6%9C%AF%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">3.技术实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">4. 注意事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E6%95%88%E6%9E%9C%E9%A2%84%E8%A7%88"><span class="toc-number">5.</span> <span class="toc-text">5.效果预览</span></a></li></ol>
     </nav>
   </div>
 </aside>
 
 <main class="main" role="main">
   <div class="content">
-  <article id="post-blog10" class="article article-type-post" itemscope
+  <article id="post-blog31" class="article article-type-post" itemscope
     itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
@@ -356,7 +358,7 @@
       
   
     <h1 class="article-title" itemprop="name">
-      一行代码-网站变灰
+      前端WebTerminal解决方案
     </h1>
   
 
@@ -364,20 +366,20 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/yanblog.github.io/2022/12/01/blog10/" class="article-date">
-	  <time datetime="2022-11-30T16:00:00.000Z" itemprop="datePublished">2022-12-01</time>
+	<a href="/yanblog.github.io/2024/10/21/blog31/" class="article-date">
+	  <time datetime="2024-10-21T00:00:00.000Z" itemprop="datePublished">2024-10-21</time>
 	</a>
 </span>
         
   <span class="article-category">
     <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/yanblog.github.io/categories/CSS/">CSS</a>
+    <a class="article-category-link" href="/yanblog.github.io/categories/%E7%BB%84%E4%BB%B6/">组件</a>
   </span>
 
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/yanblog.github.io/tags/%E6%A0%B7%E5%BC%8F/" rel="tag">样式</a>
+	<a class="article-tag-link-link" href="/yanblog.github.io/tags/vue-3/" rel="tag">vue-3</a>
   </span>
 
 
@@ -393,22 +395,74 @@
         
         
 	
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 92(字)</span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.1k(字)</span>
 	
 	
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
 	
 
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-      <h3 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h3><blockquote>
-<p>在出现一些突发情况下需要快速将web端页面变灰的需求的时候，仅用一个属性即可让整个项目实现：</p>
-</blockquote>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">filter: grayscale(1) // 参数为0-1的数值</span><br></pre></td></tr></table></figure>
-<p>在body内联样式添加如下代码实现全站变灰</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">style</span>=<span class="string">&quot;filter:grayscale(1);-webkit-filter:grayscale(1)&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+      <h4 id="1-需求背景"><a href="#1-需求背景" class="headerlink" title="1.需求背景"></a><strong>1.需求背景</strong></h4><p>后台管理类项目中经常有一种需求场景—在前端页面操作远程服务器，告别终端。伴随此功能的往往还有内置命令，快捷键操作等附加需求。由于浏览器安全策略，想在前端项目中通过 js 或者是其他的方式唤起操作系统的终端程序，基本上没有这种可能。所以基于前端可以实现一个伪终端输入窗口，配合后端服务支持实现类似终端程序的效果。</p>
+<h4 id="2-技术调研"><a href="#2-技术调研" class="headerlink" title="2.技术调研"></a><strong>2.技术调研</strong></h4><table>
+<thead>
+<tr>
+<th align="left">插件</th>
+<th align="left">问题</th>
+<th>推荐指数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><a target="_blank" rel="noopener" href="https://xtermjs.org/">Xterm</a></strong></td>
+<td align="left">主流方案</td>
+<td>⭐️⭐️⭐️⭐️</td>
+</tr>
+</tbody></table>
+<h4 id="3-技术实现"><a href="#3-技术实现" class="headerlink" title="3.技术实现"></a><strong>3.技术实现</strong></h4><ol>
+<li>依赖安装</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add @xterm/xterm @xterm/addon-fit</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>实例化 terminal</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;terminal-containet&quot;&gt;</span><br><span class="line">    &lt;div ref=&quot;terminalDom&quot; class=&quot;terminal&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; ref, onMounted, onBeforeUnmount &#125; from &quot;vue&quot;;</span><br><span class="line">import &#123; Terminal &#125; from &quot;@xterm/xterm&quot;;</span><br><span class="line">import &#123; FitAddon &#125; from &quot;@xterm/addon-fit&quot;;</span><br><span class="line">import &quot;@xterm/xterm/css/xterm.css&quot;;</span><br><span class="line"></span><br><span class="line">onMounted(() =&gt; &#123;</span><br><span class="line">  initTerminal();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">let terminalDom = ref(null);</span><br><span class="line">let terminalInstance = ref(null);</span><br><span class="line">let fitAddon = new FitAddon();</span><br><span class="line"></span><br><span class="line">//初始化Terminal工具</span><br><span class="line">const initTerminal = () =&gt; &#123;</span><br><span class="line">  terminalInstance.value = new Terminal(&#123;</span><br><span class="line">    fontSize: 14,</span><br><span class="line">    fontFamily: &quot;Monaco, Menlo, Consolas, &#x27;Courier New&#x27;, monospace&quot;,</span><br><span class="line">    theme: &#123;</span><br><span class="line">      background: &quot;rgba(0,0,0,0)&quot;,</span><br><span class="line">    &#125;,</span><br><span class="line">    cursorBlink: true,</span><br><span class="line">    cursorStyle: &quot;underline&quot;,</span><br><span class="line">    scrollback: 100,</span><br><span class="line">    tabStopWidth: 4,</span><br><span class="line">  &#125;);</span><br><span class="line">  terminalInstance.value.open(terminalDom.value);</span><br><span class="line">  terminalInstance.value.loadAddon(fitAddon); //加载自适应宽高插件</span><br><span class="line">  terminalInstance.value.focus(); //聚焦</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>页面视口变化监听：此步骤用于给后端服务创建的终端插件实时同步宽高，保证两端输入输出效果一致</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">import &#123; useResizeObserver &#125; from &quot;@vueuse/core&quot;;</span><br><span class="line">//terminal尺寸变化执行事件</span><br><span class="line">const terminalSizeChange = () =&gt; &#123;</span><br><span class="line">  fitAddon.fit();</span><br><span class="line">  const &#123; cols, rows &#125; = terminalInstance.value;</span><br><span class="line">  send(</span><br><span class="line">    JSON.stringify(&#123;</span><br><span class="line">      event: &quot;changeSize&quot;,</span><br><span class="line">      data: &#123; cols, rows &#125;,</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">//监听DOM元素尺寸变化重置Terminal</span><br><span class="line">useResizeObserver(terminalDom, terminalSizeChange);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>websocket 信息交互：此步骤用于将键盘事件通过 websocket 同步到后端终端，模拟实时输入效果。与此同时前端根据后端返回的数据，实时将信息流赋值到 terminal 终端，显示真正的命令行交互效果。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;script setup&gt;</span><br><span class="line">...</span><br><span class="line">import &#123; useWebSocket&#125; from &quot;@vueuse/core&quot;;</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">const &#123; send, close &#125; = useWebSocket(&quot;ws://127.0.0.1:8888&quot;, &#123;</span><br><span class="line">  onMessage: (ws, e) =&gt; &#123;</span><br><span class="line">    handleOnMessage(e); //onMessage事件监听</span><br><span class="line">  &#125;,</span><br><span class="line">  autoReconnect: &#123;</span><br><span class="line">    retries: 5,</span><br><span class="line">    delay: 1000,</span><br><span class="line">    onFailed() &#123;</span><br><span class="line">      console.error(&quot;websocket链接失败&quot;);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//监听键盘输入发送websocket通知</span><br><span class="line">const handleOnData = (e) =&gt; &#123;</span><br><span class="line">  send(JSON.stringify(&#123; event: &quot;keyInput&quot;, data: e &#125;));</span><br><span class="line">&#125;;</span><br><span class="line">//处理websocket响应事件</span><br><span class="line">const handleOnMessage = (e) =&gt; &#123;</span><br><span class="line">  const &#123; event, data &#125; = JSON.parse(e.data);</span><br><span class="line">  // if (data == &quot;\r&quot;) terminalInstance.value.writeln(&quot;&quot;);</span><br><span class="line">  if (event == &quot;streamOutput&quot;) &#123;</span><br><span class="line">    terminalInstance.value.write(data);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<ol start="5">
+<li><p>Node 后端服务实现</p>
+<ul>
+<li>依赖安装</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add ws ssh2 utf8</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>websocket 服务</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">WebSocketServer</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;ws&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> utf8 = <span class="built_in">require</span>(<span class="string">&quot;utf8&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">SSHClient</span> = <span class="built_in">require</span>(<span class="string">&quot;ssh2&quot;</span>).<span class="property">Client</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//websocket服务启动</span></span><br><span class="line"><span class="keyword">let</span> wsIns;</span><br><span class="line"><span class="keyword">const</span> wss = <span class="keyword">new</span> <span class="title class_">WebSocketServer</span>(&#123; <span class="attr">port</span>: <span class="number">8888</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;websocket服务已开启：ws://127.0.0.1:8888&quot;</span>);</span><br><span class="line">wss.<span class="title function_">on</span>(<span class="string">&quot;connection&quot;</span>, <span class="function">(<span class="params">ws</span>) =&gt;</span> &#123;</span><br><span class="line">  ws.<span class="property">sendData</span> = <span class="function">(<span class="params">event, data</span>) =&gt;</span> &#123;</span><br><span class="line">    ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; event, data &#125;));</span><br><span class="line">  &#125;;</span><br><span class="line">  ws.<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="variable language_">console</span>.<span class="property">error</span>);</span><br><span class="line">  ws.<span class="title function_">on</span>(<span class="string">&quot;message&quot;</span>, <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; event, data &#125; = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(msg);</span><br><span class="line">    <span class="keyword">if</span> (event == <span class="string">&quot;createNewServer&quot;</span>) &#123;</span><br><span class="line">      <span class="title function_">createNewServer</span>(data);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  ws.<span class="title function_">on</span>(<span class="string">&quot;close&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(ws.<span class="property">_closeTimeout</span>, ws.<span class="property">send</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  ws.<span class="property">_closeTimeout</span> = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    ws.<span class="title function_">terminate</span>();</span><br><span class="line">  &#125;, <span class="number">600000</span>);</span><br><span class="line">  wsIns = ws;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>SSH 服务</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">createNewServer</span> = (<span class="params">config</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; cols, rows, host, username, password &#125; = config;</span><br><span class="line">  <span class="keyword">let</span> ssh = <span class="keyword">new</span> <span class="title class_">SSHClient</span>();</span><br><span class="line">  ssh</span><br><span class="line">    .<span class="title function_">on</span>(<span class="string">&quot;ready&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      wsIns.<span class="title function_">sendData</span>(<span class="string">&quot;streamOutput&quot;</span>, <span class="string">&quot;SSH CONNECTION Success\r\n&quot;</span>);</span><br><span class="line">      ssh.<span class="title function_">shell</span>(&#123; cols, rows &#125;, <span class="function">(<span class="params">err, stream</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          <span class="keyword">return</span> wsIns.<span class="title function_">sendData</span>(</span><br><span class="line">            <span class="string">&quot;streamOutput&quot;</span>,</span><br><span class="line">            <span class="string">&quot;\r\n*** SSH SHELL ERROR: &quot;</span> + err.<span class="property">message</span> + <span class="string">&quot; ***\r\n&quot;</span></span><br><span class="line">          );</span><br><span class="line">        &#125;</span><br><span class="line">        wsIns.<span class="title function_">on</span>(<span class="string">&quot;message&quot;</span>, <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">const</span> &#123; event, data &#125; = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(msg);</span><br><span class="line">          <span class="keyword">if</span> (event == <span class="string">&quot;keyInput&quot;</span>) &#123;</span><br><span class="line">            stream.<span class="title function_">write</span>(data);</span><br><span class="line">          &#125; <span class="keyword">else</span> <span class="keyword">if</span> (event == <span class="string">&quot;changeSize&quot;</span>) &#123;</span><br><span class="line">            stream.<span class="title function_">setWindow</span>(data.<span class="property">rows</span>, data.<span class="property">cols</span>);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        stream</span><br><span class="line">          .<span class="title function_">on</span>(<span class="string">&quot;data&quot;</span>, <span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">            wsIns.<span class="title function_">sendData</span>(</span><br><span class="line">              <span class="string">&quot;streamOutput&quot;</span>,</span><br><span class="line">              utf8.<span class="title function_">decode</span>(d.<span class="title function_">toString</span>(<span class="string">&quot;binary&quot;</span>))</span><br><span class="line">            );</span><br><span class="line">          &#125;)</span><br><span class="line">          .<span class="title function_">on</span>(<span class="string">&quot;close&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            ssh.<span class="title function_">end</span>();</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">on</span>(<span class="string">&quot;close&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      wsIns.<span class="title function_">sendData</span>(<span class="string">&quot;streamOutput&quot;</span>, <span class="string">&quot;SSH CONNECTION CLOSED\r\n&quot;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      wsIns.<span class="title function_">sendData</span>(<span class="string">&quot;streamOutput&quot;</span>, <span class="string">&quot;SSH CONNECTION ERROR\r\n&quot;</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">connect</span>(&#123;</span><br><span class="line">      host,</span><br><span class="line">      <span class="attr">port</span>: <span class="number">22</span>,</span><br><span class="line">      username,</span><br><span class="line">      password,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="4-注意事项"><a href="#4-注意事项" class="headerlink" title="4. 注意事项"></a><strong>4. 注意事项</strong></h4><ol>
+<li>前端键盘事件无需本地保存字符串后统一传递给后端，实时传输即可。中心思想，前端只展示后端返回数据。</li>
+<li>后端服务注意 websocket 及 SSH 服务实现即可。中心思想：后端只做数据转发。</li>
+</ol>
+<h4 id="5-效果预览"><a href="#5-效果预览" class="headerlink" title="5.效果预览"></a><strong>5.效果预览</strong></h4><img src="https://gitee.com/vae12306/image_bed/raw/master/images/202410211620286.png" alt="image-20241021162013667" />
+
       
     </div>
     <div class="article-footer">
@@ -417,7 +471,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="https://ovyvo.github.io/yanblog.github.io/2022/12/01/blog10/" title="一行代码-网站变灰" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2022/12/01/blog10/</a>
+      <a href="https://ovyvo.github.io/yanblog.github.io/2024/10/21/blog31/" title="前端WebTerminal解决方案" target="_blank" rel="external">https://ovyvo.github.io/yanblog.github.io/2024/10/21/blog31/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -457,15 +511,10 @@
     
     <ul class="pager pull-left">
       
-      <li class="prev">
-        <a href="/yanblog.github.io/2023/02/13/blog11/" title="Generator函数及Async/Await"><i
-            class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-      </li>
-      
       
       <li class="next">
-        <a href="/yanblog.github.io/2022/11/08/blog9/"
-          title="commitlint+husky+commitizen+lint-stage代码风格及上传规范管理"><span>下一篇&nbsp;&nbsp;</span><i
+        <a href="/yanblog.github.io/2024/07/19/blog30/"
+          title="Vite插件开发"><span>下一篇&nbsp;&nbsp;</span><i
             class="icon icon-angle-right" aria-hidden="true"></i></a>
       </li>
       
